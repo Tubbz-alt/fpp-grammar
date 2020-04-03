@@ -1,0 +1,404 @@
+-- definitions
+Prog.			                    Program	::= [Def] ;
+terminator                          Def "" ;
+
+-- A Franca IDL file consist of a series of definitions.
+DPackage.		                    Def ::= "package" PackageName ;
+
+-- Import from another Franca file.
+DImportPackage.		                Def ::= "import" Namespace "from" String ;
+DImport.                            Def ::= "import" String;
+
+-- Franca IDL
+DCustomTag.                         Def ::= "tag" Type TagId;
+
+-- Interface
+DInterface.		                    Def ::= "interface" Id "{" InterfaceBody "}";
+DInterfaceMan.                      Def ::= "interface" Id "manages" [IdsList] "{" InterfaceBody "}";
+DInterfaceExt.                      Def ::= "interface" Id "extends" [IdsList] "{" InterfaceBody "}";
+
+-- Type Collection
+DTypeCollection.	                Def ::= "typeCollection" Id "{" TypeCollectionBody "}" ;
+
+-- Deployment specification
+DSpecification.                     Def ::= "specification" PackageName "{" SpecificationBody "}";
+DSpecificationExtends.              Def ::= "specification" PackageName "extends" PackageName "{" SpecificationBody "}";
+
+-- Interface deployment
+DDefineSpec.                        Def ::= "define" PackageName "for" "interface"  InterfaceName "{"  InterfaceSpecBody "}"; 
+DDefineServiceSpec.                 Def ::= "define" PackageName "for" "service"    PackageName "as" Id "{" ServiceSpecBody "}";
+DProviderSpec.                      Def ::= "define" PackageName "for" "provider"   Id "{"  ProviderSpecBody  "}";
+DTypeCollectionSpec.                Def ::= "define" PackageName "for" "typeCollection" PackageName "{" TypeCollectionSpecBody "}";
+
+-- Franca++
+DComponent.                         Def ::= "component" ComponentAttribute Id "{" ComponentBody "}";
+DComponentDef.                      Def ::= "component" ComponentAttribute Id;           
+DComponentWithotAttrs.              Def ::= "component" Id "{" ComponentBody "}";
+DComponentExtendedWithoutAttrs.     Def ::= "component" Id "extends" Id "{" ComponentBody "}";
+DComponentExtended.                 Def ::= "component" ComponentAttribute Id "extends" Id "{" ComponentBody "}";
+
+DContract.                          Def ::= "contract"  Id "{" ContractBody "}";
+DDevice.                            Def ::= "device"    Id "{" DeviceBody "}";
+
+-- Struct
+DSruct.		                        Def ::= Struct;
+DConstStruct.                       Def ::= ConstStruct;
+
+-- containers: Array, map, const map
+DArray.                             Def ::= Array;
+DMap.                               Def ::= Map;
+
+-------------------------------------------------------------------------------------------------------------------
+---------------------------- Franca Interface body ----------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+DIBody.			    InterfaceBody       ::= [InterfaceBodyItem] ;
+terminator          InterfaceBodyItem "" ;
+
+-- name of the interface
+DInterfaceName.     InterfaceName       ::= Namespace;
+
+-- Interface version 
+-- verson { major X minor Y }
+DIVersion.          InterfaceBodyItem   ::= Version;
+
+-- Methods are one kind of interface body item. 
+-- They can have either in- or out-parameters, both, or none.
+-- Interfaces contains of a number of interface body items.
+DIMethod.	        InterfaceBodyItem   ::= Method;
+
+-- Interface broadcasts
+DIBroadcast.		InterfaceBodyItem   ::= Broadcast;
+
+-- Attributes are also an interface body item.
+-- Due to only two attribute flags being possible, the combinations are listed here separately to make 
+-- code generation easier.
+DIAttribute.	    InterfaceBodyItem   ::= Attribute;
+
+-- Interface can contain enumeration
+DIEnumeration.      InterfaceBodyItem   ::= Enumeration;
+
+-- Interface can contain map type definition
+DIMap.              InterfaceBodyItem   ::= Map;
+
+-- Interface can contain type definitions
+DITypeDefinition.   InterfaceBodyItem   ::= TypeDefinition;
+
+-- Interface can contain struct definitions
+DIStruct.           InterfaceBodyItem   ::= Struct;
+
+-- Interface can contain unions
+DIUnion.            InterfaceBodyItem   ::= Union;
+
+-- Interface can contain arrays
+DIArray.            InterfaceBodyItem   ::= Array;
+
+-------------------------------------------------------------------------------------------------------------------
+---------------------------- Franca Type collection body ----------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+
+DTypeCollectionBody.    TypeCollectionBody ::= [TypeCollectionBodyItem];
+terminator              TypeCollectionBodyItem "";
+
+-- PrivimitiveConstants
+DTCPrivimitiveIntegerConstant.   TypeCollectionBodyItem ::= "const" Type Id "=" Integer;
+
+DTCConstStructDef.  TypeCollectionBodyItem ::= ConstStruct;
+DTCTypeDefinition.  TypeCollectionBodyItem ::= TypeDefinition;
+DTCStructDef.       TypeCollectionBodyItem ::= Struct;
+DTCUnionDef.        TypeCollectionBodyItem ::= Union;
+DTCArrayDef.        TypeCollectionBodyItem ::= Array;
+DTCMapDef.          TypeCollectionBodyItem ::= Map;
+DTCEnumDef.		    TypeCollectionBodyItem ::= Enumeration;
+DTCVersion.         TypeCollectionBodyItem ::= Version;
+
+-------------------------------------------------------------------------------------------------------------------
+---------------------------- Franca Struct body -------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+
+DStruct.                Struct ::= "struct" Id [StructFlags] "{" StructBody "}";
+DExtStruct.             Struct ::= "struct" Id "extends" Id [StructFlags] "{" StructBody "}" ;
+DCStruct.               ConstStruct ::= "const" "struct" Id Id "{" ConstStructBody "}";
+
+DStructFlags.           StructFlags ::= "polymorphic";
+terminator              StructFlags "";
+
+DSBody.			        StructBody ::= [StructBodyItem] ;
+terminator              StructBodyItem "" ;       
+
+DSCBody.                ConstStructBody ::= [ConstStructBodyItem];
+separator               ConstStructBodyItem ",";
+terminator              ConstStructBodyItem "";
+
+DSBodyItem.              StructBodyItem ::= Type Id;
+DSBodyEnumDef.		     StructBodyItem ::= Enumeration;
+DSBodyExtendedEnumDef.	 StructBodyItem ::= Enumeration;
+DSBodyItemArray.         StructBodyItem ::= Array;
+DSBodyItemMap.           StructBodyItem ::= Map;
+
+DSConstBodyItem.        ConstStructBodyItem ::= Id "=" Integer;
+DSConstStringBodyItem.  ConstStructBodyItem ::= Id "=" String;
+DSConstBodyEnumItem.    ConstStructBodyItem ::= Id "=" Id "::" Id;
+DSConstArrayBodyItem.   ConstStructBodyItem ::= Id "=" "[" [IdsList] "]";
+
+-------------------------------------------------------------------------------------------------------------------
+------------------------------- Specification body ----------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+
+DSpecificationBody.         SpecificationBody ::= [SpecificationItem];
+terminator                  SpecificationItem "" ;       
+
+DSItemInterface.            SpecificationItem ::= "for" Id "{" TypeSpecificationItemBody "}";
+DTSItemBody.                TypeSpecificationItemBody ::= [TypeSpecificationItem];
+separator                   TypeSpecificationItem ";";
+terminator                  TypeSpecificationItem "" ;  
+
+DTSItem.                    TypeSpecificationItem ::= Id ":" TypeSpecificationItemType "(" TypeSpecItemDefaultValue ")";
+
+DTSItemDefaultValue.        TypeSpecItemDefaultValue ::= "default" ":" Constant;
+DTSItemDefaultString.       TypeSpecItemDefaultValue ::= "default" ":" String;
+
+DTSItemDefaultType.         TypeSpecItemDefaultValue ::= "default" ":" Type ;
+
+DTSItemDeafaultValueOpt.    TypeSpecItemDefaultValue ::= "optional";
+DTSItemDeafaultValueReq.    TypeSpecItemDefaultValue ::= "required";
+
+
+DTSItemTypeListDefType.     TypeSpecificationItemType ::= "{" [IdsList] "}";
+DTSItemType.                TypeSpecificationItemType ::= Type;
+
+-------------------------------------------------------------------------------------------------------------------
+----------------------------------- Interface deployment specification --------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+
+DTypeCollectionSpecBody.            TypeCollectionSpecBody ::= [TypeCollectionSpecBodyItem];
+terminator                          TypeCollectionSpecBodyItem "";
+
+DServiceSpecBody.                   ServiceSpecBody ::= [ServiceSpecBodyItem];
+terminator                          ServiceSpecBodyItem "";
+
+DInterfaceSpecBody.                 InterfaceSpecBody ::= [InterfaceSpecBodyItem];
+terminator                          InterfaceSpecBodyItem "";
+
+DServiceSpecBodyItem.               ServiceSpecBodyItem ::= "provide" Id "on" PackageName "{" ServiceProvideItemBody "}";
+DServiceProvideItemBody.            ServiceProvideItemBody ::= "";
+
+DTCSpecBodyItemEnum.                TypeCollectionSpecBodyItem ::= "enumeration" Id "{" [EnumSpecBodyItem] "}";
+DTCSpecBodyItemStruct.              TypeCollectionSpecBodyItem ::= "struct" Id "{" [StructSpecBodyItem] "}";
+DTCSpecBodyItem.                    TypeCollectionSpecBodyItem ::= "union" Id "{" [UnionSpecBodyItem] "}";
+
+DEnumSpecBodyItem.                  EnumSpecBodyItem    ::= Id "{" [InterfaceSpecAttributeItem] "}";
+DStructSpecBodyItem.                StructSpecBodyItem  ::= Id "{" [InterfaceSpecAttributeItem] "}";
+DUnionSpecBodyItem.                 UnionSpecBodyItem   ::= Id "{" [InterfaceSpecAttributeItem] "}";
+
+terminator                          EnumSpecBodyItem "";
+terminator                          StructSpecBodyItem "";
+terminator                          UnionSpecBodyItem "";
+
+DInterfaceSpecItem.                 InterfaceSpecBodyItem ::= InterfaceSpecAttributeItem;
+DInterfaceSpecItemType.             InterfaceSpecBodyItem ::= TypeCollectionSpecBodyItem;
+
+DInterfaceSpecAttribute.            InterfaceSpecBodyItem ::= "attribute" Id "{" [InterfaceSpecAttributeItem] "}";
+DInterfaceSpecMethod.               InterfaceSpecBodyItem ::= "method" Id "{"    [InterfaceSpecAttributeItem]    "}";
+DInterfaceSpecBroadcast.            InterfaceSpecBodyItem ::= "broadcast" Id "{" [InterfaceSpecAttributeItem] "}";
+
+-- Provider specification
+DProviderSpecBody.                  ProviderSpecBody ::= [ProviderSpecBodyItem];
+DProviderSpecBodyItem.              ProviderSpecBodyItem ::= "instance" PackageName "{" [InterfaceSpecAttributeItem] "}";
+terminator                          ProviderSpecBodyItem "";
+
+
+-- Specification attributes
+DInterfaceSpecAttributeItem.        InterfaceSpecAttributeItem ::= Id "=" Constant;
+DInterfaceSpecAttributeItemId.      InterfaceSpecAttributeItem ::= Id "=" Id;
+DInterfaceSpecAttributeItemStr.     InterfaceSpecAttributeItem ::= Id "=" String;
+DInterfaceSpecAttributeItemArr.     InterfaceSpecAttributeItem ::= Id "=" "{" InterfaceSpecBodyItemValueBody "}";
+DInterfaceSpecAttributeItemMethod.  InterfaceSpecAttributeItem ::= MethodBodyItem;
+terminator                          InterfaceSpecAttributeItem "";
+
+DInterfaceSpecBodyItemValueBody.    InterfaceSpecBodyItemValueBody ::= [InterfaceSpecBodyItemValueBodyItem];
+DInterfaceSpecBodyItemValue.        InterfaceSpecBodyItemValueBodyItem ::= Integer;
+separator                           InterfaceSpecBodyItemValueBodyItem "," ;
+
+-------------------------------------------------------------------------------------------------------------------
+------------------------------------------------- Component body --------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+
+DComponentBody.                 ComponentBody           ::= [ComponentBodyItem];
+terminator                      ComponentBodyItem "";
+terminator                      ComponentBody "";
+
+DComponentBodyItemVersion.      ComponentBodyItem       ::= Version;
+DComponentBodyItemContains.     ComponentBodyItem       ::= "contains" Id "as" Id;
+DComponentBodyItemProvidesAs.   ComponentBodyItem       ::= "provides" Id "as" Id;
+DComponentBodyItemProvides.     ComponentBodyItem       ::= "provides" Id;
+DComponentBodyItemRequiresS.    ComponentBodyItem       ::= "requires" Id;
+DComponentBodyItemRequires.     ComponentBodyItem       ::= "requires" Namespace "as" Id;
+DComponentBodyItemConnect.      ComponentBodyItem       ::= "connect" Namespace "to" Namespace;
+DComponentBodyItemDelegate.     ComponentBodyItem       ::= "delegate" "required" Id "to" Id;
+DComponentBodyItemOptional.     ComponentBodyItem       ::= "optional" "requires" Namespace "as" Id;
+DComponentBodyItemImplement.    ComponentBodyItem       ::= "implement" Id "as" Id "by" Id ComponentItemModifier;
+DComponentItemModifier.         ComponentItemModifier   ::= Id;
+
+DComponentAttribute.            ComponentAttribute      ::= Id;
+
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------- Contract body -------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+
+DCBody.                         ContractBody            ::= [ContractBodyItem] ;
+terminator                      ContractBodyItem "" ;
+
+DContractVarItem.               ContractBodyItem        ::= "vars" "{" [ContractItemVars] "}";
+DContractItemVars.              ContractItemVars        ::= Type Id;
+terminator                      ContractItemVars "";
+
+DContractItem.                  ContractBodyItem        ::= Id "{" [ContractStates] "}";
+DContractStates.                ContractStates          ::= "state" "{" [ContractStateActions] "}";
+terminator                      ContractStates "";
+
+DContractStateActions.          ContractStateActions    ::= "on" Id Id "->" Id ContractActionBody;
+DContractStateActionsShort.     ContractStateActions    ::= "on" Id Id "[" [ContractActionBodyItem] "]" "->" Id;
+DContractActionBody.            ContractActionBody      ::= [ContractActionBodyItem];
+
+DContractActionBodyItemVersion. ContractActionBodyItem  ::= Version;
+DContractActionBodyItem.        ContractActionBodyItem  ::= "";
+
+terminator                      ContractActionBodyItem "";
+terminator                      ContractStateActions "";
+
+-------------------------------------------------------------------------------------------------------------------
+--------------------------------------- Device body ---------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+
+DDeviceBody.                DeviceBody ::= [DeviceBodyItem];
+terminator                  DeviceBodyItem ""; 
+terminator                  DeviceBody "" ;
+
+DDeviceBodyItemAdapter.     DeviceBodyItem ::= "adapter" Id;
+DDeviceBodyItemDevice.      DeviceBodyItem ::= "device" Id;
+DDeviceBodyItemDeviceExt.   DeviceBodyItem ::= "device" Id "{" DeviceBody "}";
+
+-------------------------------------------------------------------------------------------------------------------
+
+-- Version is another interface body item.
+DVersion.		        Version ::= "version" "{" "major" Integer "minor" Integer "}" ;
+
+-- Enumeration
+DEnumeration.           Enumeration ::= "enumeration" Id "{" EnumList "}" ;
+DExtEnumeration.        Enumeration ::= "enumeration" EnumId "extends" Id "{" EnumList "}" ;
+
+-- Union
+DUnionDef.              Union ::= "union" Id "{" UnionBody "}";
+
+-- Array
+DArrayDefition.           Array ::= "array" Id "of" Type;
+DImplicitArrayDefinition. Array ::= Id "[]";
+
+-- Map
+DMapDefinition.           Map ::= "map" Id "{" Type "to" Type "}";
+
+-- Typedef
+DTypeDefCustom.		    TypeDefinition ::= "typedef" Id "is" Type;
+
+-- custom comment tag
+DTagId.                 TagId ::= Id;
+
+-- maps
+DExplicitMapList.       ExplicitMapList ::= Id "=>" Id;
+separator               ExplicitMapList ",";
+terminator              ExplicitMapList "";
+
+-- namespace items
+DPackageName.	        PackageName ::= [NamespaceID] ;
+
+DNamespace.		        Namespace   ::= [NamespaceID] ;
+DNamespaceID.		    NamespaceID ::= Id ;
+DNamespaceIDAll.        NamespaceID ::= "*" ;
+separator               NamespaceID "." ;
+
+--- Union body
+DUBody.			        UnionBody ::= [UnionBodyItem] ;
+terminator              UnionBodyItem "" ;
+
+DUBodyItem.             UnionBodyItem ::= Type Id;
+
+-- Attribute
+DAttribute.             Attribute ::= "attribute" Type Id [Flags];
+DAttributeCustomT.      Attribute ::= "attribute" PackageName Id [Flags];
+
+--- Method body
+DMethod.                Method ::= "method" Id [Flags] "{" [MethodBodyItem] "}";
+
+DVoidMethod.            MethodBodyItem ::= "";
+DInMethod.		        MethodBodyItem ::= InputArguments;
+DOutMethod.		        MethodBodyItem ::= OutputArguments;
+DInOutMethod.	        MethodBodyItem ::= InputArguments OutputArguments;
+DMethodError.           MethodBodyItem ::= "error" Id;
+terminator              MethodBodyItem "";
+
+-- Broadcast body
+DBroadcast.             Broadcast ::= "broadcast" Id [Flags] "{" [BroadcastBodyItem] "}";
+
+DVoidBroadcast.         BroadcastBodyItem ::= "";
+DInBroadcast.		    BroadcastBodyItem ::= InputArguments;
+DOutBroadcast.		    BroadcastBodyItem ::= OutputArguments;
+DInOutBroadcast.		BroadcastBodyItem ::= InputArguments OutputArguments;
+terminator              BroadcastBodyItem "";
+
+DInputArguments.        InputArguments  ::= "in"  "{" [Arguments] "}";
+DOutputArguments.       OutputArguments ::= "out" "{" [Arguments] "}";
+
+-- Parameters consist of a type and an id.
+DArguments.		        Arguments ::= Type Id ;
+DSpecArguments.         Arguments ::= Id "{" [InterfaceSpecAttributeItem] "}";
+terminator              Arguments "" ;
+
+DEnumIdent.		        EnumId ::= Id ;
+DEnumList.		        EnumList ::= [Enum] ;
+terminator              Enum "" ;
+DEnum.			        Enum ::= Id ;
+DEnumValue.		        Enum ::= Id "=" Integer ;
+
+DIdsList.               IdsList ::= Id;
+DIdsTypeList.           IdsList ::= Type;
+separator               IdsList ",";
+terminator              IdsList "";
+
+DFlags.                 Flags ::= Id;
+DFlagsEmpty.            Flags ::= "";
+terminator              Flags "";
+
+-- Builtin Types
+
+DUIntEight.		        Type ::= "UInt8" ;
+DIntEight.		        Type ::= "Int8" ;
+DUIntSixteen.		    Type ::= "UInt16" ;
+DIntSixteen.		    Type ::= "Int16" ;
+DUIntThirtyTwo.		    Type ::= "UInt32" ;
+DIntThirtyTwo.		    Type ::= "Int32" ;
+DUIntSixtyFour.		    Type ::= "UInt64" ;
+DIntSixtyFour.		    Type ::= "Int64" ;
+DBoolean.		        Type ::= "Boolean" ;
+DFloat.			        Type ::= "Float" ;
+DDouble.		        Type ::= "Double" ;
+DString.		        Type ::= "String" ;
+DByteBuffer.		    Type ::= "ByteBuffer" ;
+DCustomType. 		    Type ::= Id ;
+DTypeArr.               Type ::= Type "[]";
+
+Efloat.                 Constant ::= Double;
+EString.                Constant ::= String;
+Eint.                   Constant ::= Integer;
+Etrue.	                Constant ::= "true";
+Efalse.	                Constant ::= "false";
+
+internal Elonger. Constant ::= Integer;
+internal Edouble. Constant ::= Double;
+
+-- Identifiers
+token Id (letter (letter | digit | '_' | '-')*) ;
+
+-- comments
+comment "//" ;
+comment "/*" "*/" ;
+comment "<**" "**>" ;

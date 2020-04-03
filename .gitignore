@@ -1,0 +1,12 @@
+conan.lock
+conanbuildinfo.txt
+conaninfo.txt
+*build*
+.vscode
+.idea
+.cache
+venv
+__pycache__
+*.pyc
+Testing
+.pytest_cache

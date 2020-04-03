@@ -146,9 +146,6 @@ install:
       cd bnfc && git checkout throw-runtime-exception
       make install
       cd ..
-
-      git clone https://github.com/miketsukerman/conan-jni.hpp.git
-      conan create conan-jni.hpp
     fi
 
 before_script:
@@ -158,6 +155,6 @@ script:
   - $CXX --version
   - mkdir -p build
   - cd build
-  - conan install ${CONAN_OPTS} -e CXX=${CXX} -e CC=${CC} -o enable_testsuite=True -o enable_python=True -o enable_java=True ..
+  - conan install ${CONAN_OPTS} -e CXX=${CXX} -e CC=${CC} ..
   - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_CXX_FLAGS="${CXX_OPTS}" -DENABLE_DOCS=ON -DCMAKE_BUILD_TYPE=Debug ..
   - cmake --build . --config Debug -- -j $(nproc)

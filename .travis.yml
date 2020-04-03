@@ -1,101 +1,164 @@
-language: c++
-
-stdlib:
-  - libc++
-  - stdlibc++
-
-matrix:
+language: cpp
+jobs:
   include:
+
+    - os: linux
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.8
+      env:
+         - MATRIX_EVAL="CC=gcc-4.8 CXX=g++-4.8"
+    - os: linux
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.9
+      env:
+         - MATRIX_EVAL="CC=gcc-4.9 CXX=g++-4.9"
+    - os: linux
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env:
+         - MATRIX_EVAL="CC=gcc-5 CXX=g++-5"
+    - os: linux
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+      env:
+        - MATRIX_EVAL="CC=gcc-6 CXX=g++-6"
+    - os: linux
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - MATRIX_EVAL="CC=gcc-7 CXX=g++-7"
     - os: linux
       dist: bionic
-      compiler: gcc
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
             - g++-8
-            - lcov
-          update: true
       env:
-        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
-
+        - MATRIX_EVAL="CC=gcc-8 CXX=g++-8"
     - os: linux
       dist: bionic
-      compiler: gcc
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
             - g++-9
-            - lcov
-          update: true
       env:
-        - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
+        - MATRIX_EVAL="CC=gcc-9 CXX=g++-9"
 
-    # - os: linux
-    #   dist: bionic
-    #   compiler: clang
-    #   addons:
-    #     apt:
-    #       sources:
-    #         - ubuntu-toolchain-r-test
-    #         - llvm-toolchain-bionic-6.0
-    #       packages:
-    #         - clang-6.0
-    #         - libc++-dev
-    #         - lcov
-    #       update: true
-    #   env:
-    #     # We need to pass -fsized-deallocation to clang-6 to avoid issue 
-    #     # https://github.com/RobotLocomotion/drake/issues/11638
-    #     - CXX_OPTS="-fsized-deallocation -stdlib=libc++"
-    #     - LINK_OPTS="-lc++"
-    #     - MATRIX_EVAL="CC=clang-6.0 && CXX=clang++-6.0"
-
-    # - os: linux
-    #   dist: xenial
-    #   compiler: clang
-    #   addons:
-    #     apt:
-    #       sources:
-    #         - ubuntu-toolchain-r-test
-    #         - llvm-toolchain-xenial-7
-    #       packages:
-    #         - clang-7
-    #         - libc++-7-dev
-    #         - libc++abi-7-dev
-    #         - lcov
-    #       update: true
-    #   env:
-    #     - CONAN_OPTS="-s compiler.version=7.1"
-    #     - LINK_OPTS="-lc++"
-    #     - CXX_OPTS="-stdlib=libc++"
-    #     - MATRIX_EVAL="CC=clang-7 && CXX=clang++-7"
-
-    # - os: linux
-    #   dist: xenial
-    #   compiler: clang
-    #   addons:
-    #     apt:
-    #       sources:
-    #         - ubuntu-toolchain-r-test
-    #         - llvm-toolchain-xenial-8
-    #       packages:
-    #         - clang-8
-    #         - libc++-8-dev
-    #         - libc++abi-8-dev
-    #         - libclang-common-8-dev
-    #         - lcov
-    #       update: true
-    #   env:
-    #     - CXX_OPTS="-stdlib=libc++ "
-    #     - MATRIX_EVAL="CC=clang-8 && CXX=clang++-8 && LDFLAGS='-lc++ -lc++-experimental'"
-        
     - os: linux
       dist: xenial
-      compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - sourceline: 'deb https://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.8 main'
+              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          packages:
+            - clang-3.8
+      env:
+        - MATRIX_EVAL="CC=clang-3.8 CXX=clang++-3.8"
+    - os: linux
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - sourceline: 'deb https://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.9 main'
+              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          packages:
+            - clang-3.9
+      env:
+        - MATRIX_EVAL="CC=clang-3.9 CXX=clang++-3.9"
+    - os: linux
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - sourceline: 'deb https://apt.llvm.org/xenial/ llvm-toolchain-xenial-4.0 main'
+              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          packages:
+            - clang-4.0
+      env:
+        - MATRIX_EVAL="CC=clang-4.0 CXX=clang++-4.0"
+    - os: linux
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - sourceline: 'deb https://apt.llvm.org/xenial/ llvm-toolchain-xenial-5.0 main'
+              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          packages:
+            - clang-5.0
+      env:
+        - MATRIX_EVAL="CC=clang-5.0 CXX=clang++-5.0"
+    - os: linux
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - sourceline: 'deb https://apt.llvm.org/xenial/ llvm-toolchain-xenial-6.0 main'
+              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          packages:
+            - clang-6.0
+      env:
+        - MATRIX_EVAL="CC=clang-6.0 CXX=clang++-6.0"
+    - os: linux
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - sourceline: 'deb https://apt.llvm.org/xenial/ llvm-toolchain-xenial-7 main'
+              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          packages:
+            - clang-7
+      env:
+        - MATRIX_EVAL="CC=clang-7 CXX=clang++-7"
+    - os: linux
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - sourceline: 'deb https://apt.llvm.org/xenial/ llvm-toolchain-xenial-8 main'
+              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          packages:
+            - clang-8
+      env:
+        - MATRIX_EVAL="CC=clang-8 CXX=clang++-8"
+    - os: linux
+      dist: xenial
       addons:
         apt:
           sources:
@@ -104,14 +167,8 @@ matrix:
               key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
           packages:
             - clang-9
-            - libc++-9-dev
-            - libc++abi-9-dev
-            - libclang-common-9-dev
-            - lcov
-          update: true
       env:
-        - CXX_OPTS="-stdlib=libc++ "
-        - MATRIX_EVAL="CC=clang-9 && CXX=clang++-9 && LDFLAGS=-lc++"
+        - MATRIX_EVAL="CC=clang-9 CXX=clang++-9"
 
 before_install:
   - eval "${MATRIX_EVAL}"
@@ -155,6 +212,6 @@ script:
   - $CXX --version
   - mkdir -p build
   - cd build
-  - conan install ${CONAN_OPTS} -e CXX=${CXX} -e CC=${CC} ..
+  - conan install ${CONAN_OPTS} -e CXX=${CXX} -e CC=${CC} --build missing ..
   - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_CXX_FLAGS="${CXX_OPTS}" -DENABLE_DOCS=ON -DCMAKE_BUILD_TYPE=Debug ..
   - cmake --build . --config Debug -- -j $(nproc)

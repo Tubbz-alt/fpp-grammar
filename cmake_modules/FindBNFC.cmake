@@ -75,7 +75,9 @@ if(NOT BNFC_FOUND)
       set(BNFC_${Name}_OUTPUT_SOURCES ${BNFCOutputFolder}/Absyn.C
                                       ${BNFCOutputFolder}/Printer.C)
       set(BNFC_${Name}_OUTPUT_HEADER
-          ${BNFCOutputFolder}/Absyn.H ${BNFCOutputFolder}/Parser.H
+          ${BNFCOutputFolder}/Absyn.H 
+          ${BNFCOutputFolder}/Parser.H
+          ${BNFCOutputFolder}/ParserError.H
           ${BNFCOutputFolder}/Printer.H)
 
       set(BNFC_${Name}_BISON_OUTPUT ${BNFCOutputFolder}/${FILE_NAME_WE}.y)

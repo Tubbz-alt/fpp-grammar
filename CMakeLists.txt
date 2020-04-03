@@ -32,18 +32,18 @@ bnfc_target(FrancaGrammarParserGen ${CMAKE_SOURCE_DIR}/source/grammar/franca.cf
 
 prv_add_library(
         NAME
-        fpg
+                fpg
         PUBLIC_HEADERS
-        ${BNFC_FrancaGrammarParserGen_OUTPUT_HEADER}
+                ${BNFC_FrancaGrammarParserGen_OUTPUT_HEADER}
         SOURCES
-        ${BNFC_FrancaGrammarParserGen_OUTPUT_SOURCES}
+                ${BNFC_FrancaGrammarParserGen_OUTPUT_SOURCES}
         VERSION
-        ${PROJECT_VERSION}
+                ${PROJECT_VERSION}
         PUBLIC_INCLUDE_DIRECTORIES
-        $<INSTALL_INTERFACE:include/fpg>
-        $<BUILD_INTERFACE:${BNFC_OUTPUT_DIR}>
+                $<INSTALL_INTERFACE:include/fpg>
+                $<BUILD_INTERFACE:${BNFC_OUTPUT_DIR}>
         STRIP_INSTALL_DIR
-        ${BNFC_OUTPUT_DIR}
+                ${BNFC_OUTPUT_DIR}
 )
 
 # grammar test executable
@@ -52,8 +52,7 @@ target_link_libraries(fpg-ast-test PUBLIC fpg)
 
 if(ENABLE_DOCS)
         set(DOCS_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/docs)
-        add_custom_target(makeDocsDirectory ALL COMMAND ${CMAKE_COMMAND} -E make_directory
-                              ${DOCS_OUTPUT_DIRECTORY})
+        add_custom_target(makeDocsDirectory ALL COMMAND ${CMAKE_COMMAND} -E make_directory ${DOCS_OUTPUT_DIRECTORY})
 
         include(docs/GrammarDocs.cmake)
 endif()

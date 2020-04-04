@@ -12,6 +12,7 @@ jobs:
             - g++-4.8
       env:
          - MATRIX_EVAL="CC=gcc-4.8 CXX=g++-4.8"
+
     - os: linux
       dist: xenial
       addons:
@@ -22,6 +23,7 @@ jobs:
             - g++-4.9
       env:
          - MATRIX_EVAL="CC=gcc-4.9 CXX=g++-4.9"
+
     - os: linux
       dist: xenial
       addons:
@@ -32,6 +34,7 @@ jobs:
             - g++-5
       env:
          - MATRIX_EVAL="CC=gcc-5 CXX=g++-5"
+
     - os: linux
       dist: xenial
       addons:
@@ -42,6 +45,7 @@ jobs:
             - g++-6
       env:
         - MATRIX_EVAL="CC=gcc-6 CXX=g++-6"
+
     - os: linux
       dist: xenial
       addons:
@@ -52,6 +56,7 @@ jobs:
             - g++-7
       env:
         - MATRIX_EVAL="CC=gcc-7 CXX=g++-7"
+
     - os: linux
       dist: bionic
       addons:
@@ -62,6 +67,7 @@ jobs:
             - g++-8
       env:
         - MATRIX_EVAL="CC=gcc-8 CXX=g++-8"
+
     - os: linux
       dist: bionic
       addons:
@@ -85,6 +91,7 @@ jobs:
             - clang-3.8
       env:
         - MATRIX_EVAL="CC=clang-3.8 CXX=clang++-3.8"
+
     - os: linux
       dist: xenial
       addons:
@@ -97,6 +104,7 @@ jobs:
             - clang-3.9
       env:
         - MATRIX_EVAL="CC=clang-3.9 CXX=clang++-3.9"
+
     - os: linux
       dist: xenial
       addons:
@@ -109,6 +117,7 @@ jobs:
             - clang-4.0
       env:
         - MATRIX_EVAL="CC=clang-4.0 CXX=clang++-4.0"
+
     - os: linux
       dist: xenial
       addons:
@@ -121,6 +130,7 @@ jobs:
             - clang-5.0
       env:
         - MATRIX_EVAL="CC=clang-5.0 CXX=clang++-5.0"
+
     - os: linux
       dist: xenial
       addons:
@@ -133,6 +143,7 @@ jobs:
             - clang-6.0
       env:
         - MATRIX_EVAL="CC=clang-6.0 CXX=clang++-6.0"
+
     - os: linux
       dist: xenial
       addons:
@@ -144,7 +155,9 @@ jobs:
           packages:
             - clang-7
       env:
+        - CONAN_OPTS="-s compiler.version=7.1"
         - MATRIX_EVAL="CC=clang-7 CXX=clang++-7"
+
     - os: linux
       dist: xenial
       addons:
@@ -157,6 +170,7 @@ jobs:
             - clang-8
       env:
         - MATRIX_EVAL="CC=clang-8 CXX=clang++-8"
+
     - os: linux
       dist: xenial
       addons:
@@ -199,10 +213,8 @@ install:
       mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
       export PATH=${DEPS_DIR}/cmake/bin:${PATH}
 
-      git clone https://github.com/miketsukerman/bnfc.git
-      cd bnfc && git checkout throw-runtime-exception
-      make install
-      cd ..
+      git clone https://github.com/miketsukerman/conan-bnfc.git
+      conan create ${CONAN_OPTS} --build missing conan-bnfc
     fi
 
 before_script:

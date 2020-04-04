@@ -58,6 +58,13 @@ prv_add_library(
 add_executable(fpg-ast-test ${BNFC_OUTPUT_DIR}/Test.C)
 target_link_libraries(fpg-ast-test PUBLIC fpg)
 
+# install FindBNFC.cmake
+install(
+        FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindBNFC.cmake 
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/bnfc/ 
+        COMPONENT dev
+        )
+
 if(ENABLE_DOCS)
         set(DOCS_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/docs)
         add_custom_target(makeDocsDirectory ALL COMMAND ${CMAKE_COMMAND} -E make_directory ${DOCS_OUTPUT_DIRECTORY})

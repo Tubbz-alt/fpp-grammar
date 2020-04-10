@@ -15,7 +15,7 @@ class FpgConan(ConanFile):
     build_requires = "bnfc/2.8.3@haskell/testing"
     scm = {
          "type": "git",
-         "subfolder": "fpp",
+         "subfolder": "fpg",
          "url": "https://github.com/miketsukerman/fpp-grammar.git",
          "revision": "master"
     }

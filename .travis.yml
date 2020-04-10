@@ -189,11 +189,7 @@ before_install:
 
 install:
   # haskell package manager
-  - sudo apt-get -y install cabal-install git doxygen graphviz texlive-latex-recommended python3-pip python3-setuptools
-  # update cabal package list
-  - cabal update
-  # install haskell doctest
-  - cabal install doctest alex happy
+  - sudo apt-get -y install git doxygen graphviz texlive-latex-recommended python3-pip python3-setuptools
   # codecov
   - sudo pip3 install codecov
   # conan

@@ -204,6 +204,8 @@ install:
   - sudo pip3 install sphinx sphinx_rtd_theme breathe recommonmark
   # add conan bintray repo
   - conan remote add bintray-conan https://api.bintray.com/conan/bincrafters/public-conan
+  # add conan personal repo
+  - conan remote add bintray-conan-personal https://api.bintray.com/conan/miketsukerman/fpp 
   # setup cmake
   - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
   - mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR}
@@ -212,9 +214,6 @@ install:
       CMAKE_URL="http://cmake.org/files/v3.13/cmake-3.13.0-Darwin-x86_64.tar.gz"
       mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
       export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-
-      git clone https://github.com/miketsukerman/conan-bnfc.git
-      conan create ${CONAN_OPTS} --build missing conan-bnfc
     fi
 
 before_script:

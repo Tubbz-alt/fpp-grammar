@@ -38,5 +38,4 @@ class FpgConan(ConanFile):
     def package_info(self):
         self.cpp_info.name = self.name
         self.cpp_info.libs = tools.collect_libs(self)
-        self.env_info.PYTHONPATH.append(os.path.join(self.package_folder, "lib"))
         self.env_info.CMAKE_PREFIX_PATH.append(self.package_folder)        

@@ -56,6 +56,23 @@ if(NOT BNFC_FOUND)
           ${PRV_FILE_NAME_WE}
           PARENT_SCOPE)
     endfunction()
+    
+    macro(BNFC_TARGET_JAVA Name BNFCInput BNFCOutputFolder)
+      set(BNFC_TARGET_JAVA_outputs "${BNFCOutputFolder}")
+      set(BNFC_TARGET_JAVA_extraoutputs "")
+
+      # Parsing parameters
+      set(BNFC_TARGET_JAVA_PARAM_OPTIONS)
+      set(BNFC_TARGET_JAVA_PARAM_ONE_VALUE_KEYWORDS COMPILE_FLAGS)
+      set(BNFC_TARGET_JAVA_PARAM_MULTI_VALUE_KEYWORDS)
+      cmake_parse_arguments(
+        BNFC_TARGET_JAVA_ARG "${BNFC_TARGET_JAVA_PARAM_OPTIONS}"
+        "${BNFC_TARGET_JAVA_PARAM_ONE_VALUE_KEYWORDS}"
+        "${BNFC_TARGET_JAVA_PARAM_MULTI_VALUE_KEYWORDS}" ${ARGN})
+
+      prv_parse_file_path(${BNFCInput} FILE_PATH FILE_NAME FILE_NAME_WE)
+
+    endmacro()
 
     macro(BNFC_TARGET_CPP Name BNFCInput BNFCOutputFolder)
       set(BNFC_TARGET_CPP_outputs "${BNFCOutputFolder}")
@@ -72,25 +89,25 @@ if(NOT BNFC_FOUND)
 
       prv_parse_file_path(${BNFCInput} FILE_PATH FILE_NAME FILE_NAME_WE)
 
-      set(BNFC_${Name}_OUTPUT_SOURCES ${BNFCOutputFolder}/Absyn.C
+      set(BNFC_CPP_${Name}_OUTPUT_SOURCES ${BNFCOutputFolder}/Absyn.C
                                       ${BNFCOutputFolder}/Printer.C)
-      set(BNFC_${Name}_OUTPUT_HEADER
+      set(BNFC_CPP_${Name}_OUTPUT_HEADER
           ${BNFCOutputFolder}/Absyn.H 
           ${BNFCOutputFolder}/Parser.H
           ${BNFCOutputFolder}/ParserError.H
           ${BNFCOutputFolder}/Printer.H)
 
-      set(BNFC_${Name}_BISON_OUTPUT ${BNFCOutputFolder}/${FILE_NAME_WE}.y)
-      set(BNFC_${Name}_FLEX_OUTPUT ${BNFCOutputFolder}/${FILE_NAME_WE}.l)
-      set(BNFC_${Name}_LATEX_OUTPUT ${BNFCOutputFolder}/${FILE_NAME_WE}.tex)
+      set(BNFC_CPP_${Name}_BISON_OUTPUT ${BNFCOutputFolder}/${FILE_NAME_WE}.y)
+      set(BNFC_CPP_${Name}_FLEX_OUTPUT ${BNFCOutputFolder}/${FILE_NAME_WE}.l)
+      set(BNFC_CPP_${Name}_LATEX_OUTPUT ${BNFCOutputFolder}/${FILE_NAME_WE}.tex)
 
       list(
         APPEND
         BNFC_TARGET_CPP_outputs
-        ${BNFC_${Name}_OUTPUT_HEADER}
-        ${BNFC_${Name}_OUTPUT_SOURCES}
-        ${BNFC_${Name}_BISON_OUTPUT}
-        ${BNFC_${Name}_FLEX_OUTPUT}
+        ${BNFC_CPP_${Name}_OUTPUT_HEADER}
+        ${BNFC_CPP_${Name}_OUTPUT_SOURCES}
+        ${BNFC_CPP_${Name}_BISON_OUTPUT}
+        ${BNFC_CPP_${Name}_FLEX_OUTPUT}
         ${BNFCOutputFolder}/Test.C)
 
       add_custom_command(
@@ -103,7 +120,7 @@ if(NOT BNFC_FOUND)
         WORKING_DIRECTORY .)
 
       add_custom_command(
-        OUTPUT ${BNFC_${Name}_LATEX_OUTPUT}
+        OUTPUT ${BNFC_CPP_${Name}_LATEX_OUTPUT}
         COMMAND ${BNFC_EXECUTABLE} ${BNFC_TARGET_CPP_cmdopt} --latex ${BNFCInput} -o
                 ${BNFCOutputFolder}
         DEPENDS ${BNFCInput}
@@ -113,7 +130,7 @@ if(NOT BNFC_FOUND)
 
       bison_target(
         Scanner_${Name}
-        ${BNFC_${Name}_BISON_OUTPUT}
+        ${BNFC_CPP_${Name}_BISON_OUTPUT}
         ${BNFCOutputFolder}/Bison_Parser.cpp
         DEFINES_FILE
         ${BNFCOutputFolder}/Bison_Parser.h
@@ -123,14 +140,14 @@ if(NOT BNFC_FOUND)
         ${BNFCOutputFolder}/Bison.out)
 
       flex_target(
-        Lexer_${Name} ${BNFC_${Name}_FLEX_OUTPUT}
+        Lexer_${Name} ${BNFC_CPP_${Name}_FLEX_OUTPUT}
         ${BNFCOutputFolder}/Flex_Lexer.cpp DEFINES_FILE
         ${BNFCOutputFolder}/Flex_Lexer.h)
       add_flex_bison_dependency(Lexer_${Name} Scanner_${Name})
 
-      set(BNFC_${Name}_OUTPUT_SOURCES
-          ${BNFC_${Name}_OUTPUT_SOURCES} ${BISON_Scanner_${Name}_OUTPUTS}
-          ${FLEX_Lexer_${Name}_OUTPUTS} ${BNFC_${Name}_LATEX_OUTPUT})
+      set(BNFC_CPP_${Name}_OUTPUT_SOURCES
+          ${BNFC_CPP_${Name}_OUTPUT_SOURCES} ${BISON_Scanner_${Name}_OUTPUTS}
+          ${FLEX_Lexer_${Name}_OUTPUTS} ${BNFC_CPP_${Name}_LATEX_OUTPUT})
 
     endmacro()
   endif()

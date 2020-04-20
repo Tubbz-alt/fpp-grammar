@@ -13,12 +13,26 @@ class FpgConan(ConanFile):
     generators = "cmake", "virtualrunenv"
     requires = "bison/3.3.2@bincrafters/stable", "flex/2.6.4@bincrafters/stable"
     build_requires = "bnfc/2.8.3@haskell/testing"
+    options = {
+        "enable_docs": [True, False],
+        "enable_java": [True, False],
+        "enable_cpp": [True, False]
+    }
+    default_options = {
+        "enable_cpp": True,
+        "enable_docs": False,
+        "enable_java": False,
+    }
     scm = {
          "type": "git",
          "subfolder": "fpg",
          "url": "https://github.com/miketsukerman/fpp-grammar.git",
          "revision": "master"
     }
+
+    def requirements(self):
+        if self.options.enable_java:
+            self.requires("java_installer/9.0.0@bincrafters/stable")
 
     def configure_cmake(self):
         cmake = CMake(self)

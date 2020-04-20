@@ -8,7 +8,7 @@ all:
 	@echo "make install-build-deps - to install build dependencies in ubuntu"
 	@echo "make clean - to delete all the build folders"
 
-COMMON_CMAKE_ARGS=-DCMAKE_INSTALL_PREFIX=/usr -DENABLE_DOCS=ON -G "CodeBlocks - Unix Makefiles" -S .
+COMMON_CMAKE_ARGS=-DCMAKE_INSTALL_PREFIX=/usr -DENABLE_JAVA_PARSER=ON -DENABLE_DOCS=ON -G "CodeBlocks - Unix Makefiles" -S .
 COMMON_CONAN_ARGS=-o enable_java=True --build missing
 CLANG_VERSION=9
 

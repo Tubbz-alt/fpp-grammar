@@ -1,14 +1,14 @@
 set(BNFC_CPP_OUTPUT_DIR ${CMAKE_BINARY_DIR}/franca-bnfc-cpp-gen)
-bnfc_target_cpp(FrancaGrammarParserGen ${CMAKE_SOURCE_DIR}/source/grammar/franca.cf
+bnfc_target_cpp(CppFrancaGrammarParserGen ${CMAKE_SOURCE_DIR}/source/grammar/franca.cf
         ${BNFC_CPP_OUTPUT_DIR})
 
 prv_add_library(
         NAME
                 fpg
         PUBLIC_HEADERS
-                ${BNFC_CPP_FrancaGrammarParserGen_OUTPUT_HEADER}
+                ${BNFC_CPP_CppFrancaGrammarParserGen_OUTPUT_HEADER}
         SOURCES
-                ${BNFC_CPP_FrancaGrammarParserGen_OUTPUT_SOURCES}
+                ${BNFC_CPP_CppFrancaGrammarParserGen_OUTPUT_SOURCES}
         VERSION
                 ${PROJECT_VERSION}
         PUBLIC_INCLUDE_DIRECTORIES

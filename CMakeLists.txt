@@ -44,6 +44,11 @@ endif()
 
 # parser tagets for Java
 if(ENABLE_JAVA_PARSER)
+        find_package(Java COMPONENTS Development Runtime REQUIRED)
+        find_package(JNI REQUIRED)
+        include(UseJava)
+        include(Maven)
+
         include(java.cmake)
 endif()
 

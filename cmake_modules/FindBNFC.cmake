@@ -58,8 +58,8 @@ if(NOT BNFC_FOUND)
     endfunction()
     
     macro(BNFC_TARGET_JAVA Name BNFCInput BNFCOutputFolder)
-      set(BNFC_TARGET_JAVA_outputs "${BNFCOutputFolder}")
-      set(BNFC_TARGET_JAVA_extraoutputs "")
+      # set(BNFC_TARGET_JAVA_outputs "${BNFCOutputFolder}")
+      # set(BNFC_TARGET_JAVA_extraoutputs "")
 
       # Parsing parameters
       set(BNFC_TARGET_JAVA_PARAM_OPTIONS)
@@ -71,6 +71,15 @@ if(NOT BNFC_FOUND)
         "${BNFC_TARGET_JAVA_PARAM_MULTI_VALUE_KEYWORDS}" ${ARGN})
 
       prv_parse_file_path(${BNFCInput} FILE_PATH FILE_NAME FILE_NAME_WE)
+
+      add_custom_command(
+        OUTPUT ${BNFC_TARGET_JAVA_outputs}
+        COMMAND ${BNFC_EXECUTABLE} ${BNFC_TARGET_JAVA_cmdopt} --java-antlr ${BNFCInput} -l 
+                -o ${BNFCOutputFolder}
+        DEPENDS ${BNFCInput}
+        COMMENT "[BNFC][${Name}] Generating parser and lexer for ANTLR"
+                VERBOSE ${BNFCOutputFolder}/BNFC-codegen.out
+        WORKING_DIRECTORY .)
 
     endmacro()
 

@@ -35,7 +35,7 @@ endif()
 find_package(BNFC REQUIRED)
 
 set(BNFC_OUTPUT_DIR ${CMAKE_BINARY_DIR}/franca-bnfc-gen)
-bnfc_target(FrancaGrammarParserGen ${CMAKE_SOURCE_DIR}/source/grammar/franca.cf
+bnfc_target_cpp(FrancaGrammarParserGen ${CMAKE_SOURCE_DIR}/source/grammar/franca.cf
         ${BNFC_OUTPUT_DIR})
 
 prv_add_library(

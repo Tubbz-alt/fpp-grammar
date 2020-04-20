@@ -57,18 +57,18 @@ if(NOT BNFC_FOUND)
           PARENT_SCOPE)
     endfunction()
 
-    macro(BNFC_TARGET Name BNFCInput BNFCOutputFolder)
-      set(BNFC_TARGET_outputs "${BNFCOutputFolder}")
-      set(BNFC_TARGET_extraoutputs "")
+    macro(BNFC_TARGET_CPP Name BNFCInput BNFCOutputFolder)
+      set(BNFC_TARGET_CPP_outputs "${BNFCOutputFolder}")
+      set(BNFC_TARGET_CPP_extraoutputs "")
 
       # Parsing parameters
-      set(BNFC_TARGET_PARAM_OPTIONS)
-      set(BNFC_TARGET_PARAM_ONE_VALUE_KEYWORDS COMPILE_FLAGS)
-      set(BNFC_TARGET_PARAM_MULTI_VALUE_KEYWORDS)
+      set(BNFC_TARGET_CPP_PARAM_OPTIONS)
+      set(BNFC_TARGET_CPP_PARAM_ONE_VALUE_KEYWORDS COMPILE_FLAGS)
+      set(BNFC_TARGET_CPP_PARAM_MULTI_VALUE_KEYWORDS)
       cmake_parse_arguments(
-        BNFC_TARGET_ARG "${BNFC_TARGET_PARAM_OPTIONS}"
-        "${BNFC_TARGET_PARAM_ONE_VALUE_KEYWORDS}"
-        "${BNFC_TARGET_PARAM_MULTI_VALUE_KEYWORDS}" ${ARGN})
+        BNFC_TARGET_CPP_ARG "${BNFC_TARGET_CPP_PARAM_OPTIONS}"
+        "${BNFC_TARGET_CPP_PARAM_ONE_VALUE_KEYWORDS}"
+        "${BNFC_TARGET_CPP_PARAM_MULTI_VALUE_KEYWORDS}" ${ARGN})
 
       prv_parse_file_path(${BNFCInput} FILE_PATH FILE_NAME FILE_NAME_WE)
 
@@ -86,7 +86,7 @@ if(NOT BNFC_FOUND)
 
       list(
         APPEND
-        BNFC_TARGET_outputs
+        BNFC_TARGET_CPP_outputs
         ${BNFC_${Name}_OUTPUT_HEADER}
         ${BNFC_${Name}_OUTPUT_SOURCES}
         ${BNFC_${Name}_BISON_OUTPUT}
@@ -94,8 +94,8 @@ if(NOT BNFC_FOUND)
         ${BNFCOutputFolder}/Test.C)
 
       add_custom_command(
-        OUTPUT ${BNFC_TARGET_outputs}
-        COMMAND ${BNFC_EXECUTABLE} ${BNFC_TARGET_cmdopt} --cpp ${BNFCInput} -l
+        OUTPUT ${BNFC_TARGET_CPP_outputs}
+        COMMAND ${BNFC_EXECUTABLE} ${BNFC_TARGET_CPP_cmdopt} --cpp ${BNFCInput} -l
                 -p bnfc -o ${BNFCOutputFolder}
         DEPENDS ${BNFCInput}
         COMMENT "[BNFC][${Name}] Generating parser and lexer for bison and flex"
@@ -104,7 +104,7 @@ if(NOT BNFC_FOUND)
 
       add_custom_command(
         OUTPUT ${BNFC_${Name}_LATEX_OUTPUT}
-        COMMAND ${BNFC_EXECUTABLE} ${BNFC_TARGET_cmdopt} --latex ${BNFCInput} -o
+        COMMAND ${BNFC_EXECUTABLE} ${BNFC_TARGET_CPP_cmdopt} --latex ${BNFCInput} -o
                 ${BNFCOutputFolder}
         DEPENDS ${BNFCInput}
         COMMENT "[BNFC][${Name}] Generating grammar documentation" VERBOSE

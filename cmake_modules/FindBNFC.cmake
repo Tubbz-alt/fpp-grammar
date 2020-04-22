@@ -58,9 +58,6 @@ if(NOT BNFC_FOUND)
     endfunction()
     
     macro(BNFC_TARGET_JAVA Name BNFCInput BNFCOutputFolder)
-      # set(BNFC_TARGET_JAVA_outputs "${BNFCOutputFolder}")
-      # set(BNFC_TARGET_JAVA_extraoutputs "")
-
       # Parsing parameters
       set(BNFC_TARGET_JAVA_PARAM_OPTIONS)
       set(BNFC_TARGET_JAVA_PARAM_ONE_VALUE_KEYWORDS COMPILE_FLAGS)
@@ -84,9 +81,6 @@ if(NOT BNFC_FOUND)
     endmacro()
 
     macro(BNFC_TARGET_CSHARP Name BNFCInput BNFCOutputFolder)
-      # set(BNFC_TARGET_CSHARP_outputs "${BNFCOutputFolder}")
-      # set(BNFC_TARGET_CSHARP_extraoutputs "")
-
       # Parsing parameters
       set(BNFC_TARGET_CSHARP_PARAM_OPTIONS)
       set(BNFC_TARGET_CSHARP_PARAM_ONE_VALUE_KEYWORDS COMPILE_FLAGS)
@@ -101,6 +95,29 @@ if(NOT BNFC_FOUND)
       add_custom_command(
         OUTPUT ${BNFC_TARGET_CSHARP_outputs}
         COMMAND ${BNFC_EXECUTABLE} ${BNFC_TARGET_CSHARP_cmdopt} --csharp ${BNFCInput} -l 
+                -o ${BNFCOutputFolder}
+        DEPENDS ${BNFCInput}
+        COMMENT "[BNFC][${Name}] Generating parser and lexer for ANTLR"
+                VERBOSE ${BNFCOutputFolder}/BNFC-codegen.out
+        WORKING_DIRECTORY .)
+
+    endmacro()
+
+    macro(BNFC_TARGET_PYTHON Name BNFCInput BNFCOutputFolder)
+      # Parsing parameters
+      set(BNFC_TARGET_PYTHON_PARAM_OPTIONS)
+      set(BNFC_TARGET_PYTHON_PARAM_ONE_VALUE_KEYWORDS COMPILE_FLAGS)
+      set(BNFC_TARGET_PYTHON_PARAM_MULTI_VALUE_KEYWORDS)
+      cmake_parse_arguments(
+        BNFC_TARGET_PYTHON_ARG "${BNFC_TARGET_PYTHON_PARAM_OPTIONS}"
+        "${BNFC_TARGET_PYTHON_PARAM_ONE_VALUE_KEYWORDS}"
+        "${BNFC_TARGET_PYTHON_PARAM_MULTI_VALUE_KEYWORDS}" ${ARGN})
+
+      prv_parse_file_path(${BNFCInput} FILE_PATH FILE_NAME FILE_NAME_WE)
+
+      add_custom_command(
+        OUTPUT ${BNFC_TARGET_PYTHON_outputs}
+        COMMAND ${BNFC_EXECUTABLE} ${BNFC_TARGET_PYTHON_cmdopt} --csharp ${BNFCInput} -l 
                 -o ${BNFCOutputFolder}
         DEPENDS ${BNFCInput}
         COMMENT "[BNFC][${Name}] Generating parser and lexer for ANTLR"

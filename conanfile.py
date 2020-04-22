@@ -16,10 +16,12 @@ class FpgConan(ConanFile):
     options = {
         "enable_docs": [True, False],
         "enable_java": [True, False],
+        "enable_csharp": [True, False],
         "enable_cpp": [True, False]
     }
     default_options = {
         "enable_cpp": True,
+        "enable_csharp": False,
         "enable_docs": False,
         "enable_java": False,
     }

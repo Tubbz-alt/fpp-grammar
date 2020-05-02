@@ -194,6 +194,8 @@ install:
   - sudo pip3 install codecov
   # conan
   - sudo pip3 install conan
+  # bincrafters package tools
+  - sudo pip3 install bincrafters_package_tools
   # pytest
   - sudo pip3 install pytest
   # sphinx + doxygen support + markdown support
@@ -218,7 +220,11 @@ before_script:
 script:
   - $CXX --version
   - mkdir -p build
-  - cd build
+  - pushd build
   - conan install ${CONAN_OPTS} -e CXX=${CXX} -e CC=${CC} --build missing ..
   - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_CXX_FLAGS="${CXX_OPTS}" -DENABLE_DOCS=ON -DCMAKE_BUILD_TYPE=Debug ..
   - cmake --build . --config Debug -- -j $(nproc)
+  - popd
+
+after_success:
+    bincrafters-package-tools --auto
